@@ -1,4 +1,5 @@
 This work within CMSSW environment. So please log in to your lxplus account.
+
 Set up an CMSSW area
 
 ```
@@ -24,3 +25,33 @@ scram b
 
 Get the limit directory
 
+```
+git clone git@github.com:1LStopBudapest/LimitSetting.git
+
+cd LimitSetting
+mkdir DataCard
+mkdir File
+
+```
+
+Now we calculate the expected limit with MC events. More script will be added to calculate both expected and and observed limit using predicted SM backgrounds from control regions (CR).
+
+For now we only consider the expected yield from MC in search regions (SR). So to get that we need to make region histograms for the signal and background processes.
+One can make that by using MakeRegionHistScripy.py in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
+The above part can be done in local computer or in higgs machine.
+
+Then the important step is to copy those region root files to the File directory
+
+Go to where you produce these root files and usr the following command to copy those into lxplus working directory
+```
+scp pat to the file/RegionPlot_SR*.root username@lxplus7.cern.ch:path to your working dir/CMSSW_10_2_13/src/LimitSetting/File/
+
+```
+Now back to lxplus working directory
+
+inside LimitSetting direcotry run the following command to make the datacard and combine the card
+
+```
+python DataCardScript.py
+
+```

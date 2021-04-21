@@ -14,5 +14,13 @@ git fetch origin
 git checkout v8.1.0
 
 cd $CMSSW_BASE/src
+scramv1 b clean
+scramv1 b
+
+git clone https://github.com/cms-analysis/CombineHarvester.git CombineHarvester
+scram b
 
 ```
+
+Get the limit directory
+

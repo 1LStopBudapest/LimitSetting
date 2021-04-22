@@ -42,16 +42,32 @@ The above part can be done in local computer or in higgs machine.
 
 Then the important step is to copy those region root files to the File directory
 
-Go to where you produce these root files and usr the following command to copy those into lxplus working directory
+Go to where you produce these root files and use the following command to copy those into lxplus working directory
 ```
-scp pat to the file/RegionPlot_SR*.root username@lxplus7.cern.ch:path to your working dir/CMSSW_10_2_13/src/LimitSetting/File/
+scp path-to-the-files/RegionPlot_SR*.root username@lxplus7.cern.ch:path-to-your-working-dir/CMSSW_10_2_13/src/LimitSetting/File/
 
 ```
 Now back to lxplus working directory
 
-inside LimitSetting direcotry run the following command to make the datacard and combine the card
+```
+cd CMSSW_10_2_13/src/
+cmsenv
+cd LimitSetting
+
+```
+
+Make datacard
+
+Inside LimitSetting direcotry run the following command to make the datacard and combine the cards
 
 ```
 python DataCardScript.py
+
+```
+
+Run Limit
+
+```
+python LimitRunScript.py
 
 ```

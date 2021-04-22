@@ -1,6 +1,6 @@
-This work within CMSSW environment. So please log in to your lxplus account.
+This works within CMSSW environment. So please log in to your lxplus account.
 
-Set up an CMSSW area
+Set up a CMSSW area
 
 ```
 export SCRAM_ARCH=slc7_amd64_gcc700

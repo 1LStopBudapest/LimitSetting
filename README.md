@@ -56,6 +56,15 @@ cd LimitSetting
 
 ```
 
+Make text files
+
+Inside LimitSetting direcotry run the following command to make the text files from which datacard will be made.
+
+```
+python MakeTextFileScript.py
+
+```
+
 Make datacard
 
 Inside LimitSetting direcotry run the following command to make the datacard and combine the cards
@@ -69,5 +78,29 @@ Run Limit
 
 ```
 python LimitRunScript.py
+
+```
+
+This will create the limit output root file for each signal. Now we need to make the exlusion limit plot. Here we use the package from https://github.com/CMS-SUS-XPAG/PlotsSMS  and modify it according to our purpose.
+
+But we first need to make the root file from which this plotting package make the limit plot.
+
+Run the following command
+
+```
+python SMSRootFileScript.py
+
+```
+Now go to PlotsSMS dir.
+
+```
+cd PlotsSMS
+
+```
+
+Run the following command to make the temperature plot
+
+```
+python python/makeSMSplots.py config/T2tt_dm_SUS.cfg T2tt
 
 ```

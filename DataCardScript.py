@@ -12,9 +12,10 @@ SRbins = SRBins #make sure the bin number is consistent with the number of regio
 for sig in signals:
 
     txtline = []
+    txtline.append("echo 'Making datacards from the text files'\n")
     for b in range(SRBins):
         txtline.append("python MakeCard.py --bins %i --sig %s\n"%(b, sig))
-
+    txtline.append("echo 'Making datacards completed'\n")
     fsh = open("MakeDataCardScript.sh", "w")
     fsh.write(''.join(txtline))
     fsh.close()
@@ -36,9 +37,15 @@ for sig in signals:
         cardcomb.append(lt)
 
     bsline = []
+    bsline.append("echo 'combining datacards for signal %s'\n"%sig)
     bsline.append("combineCards.py "+" ".join(cardcomb)+" > CCDataCard_T2tt_"+sig+".txt\n")
+    bsline.append("echo 'combining datacards completed'\n")
     bsline.append("rm datacard_Bin*.txt\n")
+    bsline.append("echo 'moving combined datacards to DataCard dir'\n")
     bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")
+    bsline.append("echo 'combine datacard process completed'\n")
+    bsline.append("echo '.....................'\n")
+    bsline.append("echo '.....................'\n")
 
     bsh = open("CombineDataCardScript.sh", "w")
     bsh.write(''.join(bsline))

@@ -30,10 +30,7 @@ git clone git@github.com:1LStopBudapest/LimitSetting.git
 
 cd LimitSetting
 mkdir DataCard
-mkdir File
-cd File
-wget https://github.com/1LStopBudapest/AuxFiles/blob/main/xSec.root
-cd ..
+
 ```
 
 Now we calculate the expected limit with MC events. More script will be added to calculate both expected and and observed limit using predicted SM backgrounds from control regions (CR).

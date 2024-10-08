@@ -36,7 +36,7 @@ if isSignal:
         BTag_l = []
         BTag_b = []
         if 'T2tt_'+p!= proc: continue
-        f = ROOT.TFile.Open('File/RegionPlot_SR_T2tt_'+p+'.root')
+        f = ROOT.TFile.Open('File/PromptBKVal1_SR+CR_T2tt_'+p+'.root')
         h = f.Get('h_reg_'+proc)
         for b in range(1, h.GetNbinsX() + 1):
             rate.append(h.GetBinContent(b))
@@ -46,10 +46,11 @@ if isSignal:
             JEC.append(1.01)
             JER.append(1.01)
             leptonSF.append(1.01)
-            nISR.append(1.05)
+            nISR.append(1.02)
             wPt.append(-1)
             BTag_l.append(1.001)
-            BTag_b.append(1.00)
+            BTag_b.append(1.001)
+        
         oname = 'File/'+proc+'.txt'
         with open(oname,'w') as ofile:
             ofile.write('rate,'+','.join(list(str(r) for r in rate))+'\n')
@@ -66,10 +67,11 @@ if isSignal:
 
 elif isData:
     rate = []
-    f = ROOT.TFile.Open('File/RegionPlot_SR_'+sname[proc]+'.root')
+    f = ROOT.TFile.Open('File/PromptBKVal1_SR+CR_'+sname[proc]+'.root')
     h = f.Get('h_reg_'+sname[proc])
     for b in range(1, h.GetNbinsX() + 1):
         rate.append(h.GetBinContent(b))
+    
     oname = 'File/'+proc+'.txt'
     with open(oname,'w') as ofile:
         ofile.write('rate,'+','.join(list(str(r) for r in rate))+'\n')
@@ -85,7 +87,7 @@ else:
     wPt = []
     BTag_l = []
     BTag_b = []
-    f = ROOT.TFile.Open('File/RegionPlot_SR_'+sname[proc]+'.root')
+    f = ROOT.TFile.Open('File/PromptBKVal1_SR+CR_'+sname[proc]+'.root')
     h = f.Get('h_reg_'+sname[proc])
     for b in range(1, h.GetNbinsX() + 1):
         rate.append(h.GetBinContent(b))
@@ -95,10 +97,11 @@ else:
         JEC.append(1.01)
         JER.append(1.01)
         leptonSF.append(1.01)
-        nISR.append(1.002 if 'ttbar' in proc else -1)
+        nISR.append(1.02 if 'ttbar' in proc else -1)
         wPt.append(1.05 if 'WJet' in proc else -1)
         BTag_l.append(1.001)
-        BTag_b.append(1.00)
+        BTag_b.append(1.001)
+    
     oname = 'File/'+proc+'.txt'
     with open(oname,'w') as ofile:
         ofile.write('rate,'+','.join(list(str(r) for r in rate))+'\n')

@@ -16,7 +16,7 @@ proccs = sigs + bkgs + data
 txtline = []
 
 for proc in proccs:
-    txtline.append("python MakeTextFile.py --proc %s\n"%(proc))
+    txtline.append("python3 MakeTextFile.py --proc %s\n"%(proc))
    
 fsh = open("MakeTextFileScript.sh", "w")
 fsh.write(''.join(txtline))

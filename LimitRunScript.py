@@ -11,8 +11,8 @@ def get_parser():
     '''
     import argparse
     argParser = argparse.ArgumentParser(description = "Argument parser")
-    argParser.add_argument('--signal',           action='store',                     type=str,            default='1076_1016',                                help="Which signal point?" )
-    argParser.add_argument('--doScan',             action='store',                   type=bool,            default=True,                                             help="running over all signal points" )
+    argParser.add_argument('--signal',           action='store',                     type=str,            default='1000_920',                                help="Which signal point?" )
+    argParser.add_argument('--doScan',             action='store',                   type=bool,            default=False,                                             help="running over all signal points" )
     return argParser
 
 options = get_parser().parse_args()
@@ -25,13 +25,13 @@ sname = '_T2tt_'+signal
 if not doScan:
     txtline = []
     cardname = 'DataCard/CCDataCard'+sname+'.txt'
-    txtline.append("combine -M AsymptoticLimits %s --run expected --name %s\n"%(cardname, sname))
+    txtline.append("combine -M AsymptoticLimits %s --name %s\n"%(cardname, sname))
     fsh = open("RunLimitScript.sh", "w")
     fsh.write(''.join(txtline))
     fsh.close()
     os.system('chmod 744 RunLimitScript.sh')
     print('......................')
-    print 'Running limit for signal point: ', sname
+    print('Running limit for signal point: ', sname)
     print('......................')
     os.system('./RunLimitScript.sh')
 
@@ -47,12 +47,12 @@ else:
     print('......................')
     for i, (k, v) in enumerate(df.items()):
         txtline = []
-        txtline.append("combine -M AsymptoticLimits %s --run expected --name %s\n"%(k, v))
+        txtline.append("combine -M AsymptoticLimits %s --name %s\n"%(k, v))
         fsh = open("RunLimitScript_%i.sh"%i, "w")
         fsh.write(''.join(txtline))
         fsh.close()
         os.system('chmod 744 RunLimitScript_%i.sh'%i)
         print('......................')
-        print 'Running limit for signal point: ',v
+        print('Running limit for signal point: ',v)
         print('......................')
         os.system('./RunLimitScript_%i.sh'%i)

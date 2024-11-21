@@ -6,8 +6,9 @@ import math
 import ROOT
 from Config import *
 
-WBins = SRBins + CRBins #make sure the bin number is consistent with the number of region histogram bins
-BinLabelList = SRBinLabelList  + CRBinLabelList
+WBins = SRBins #make sure the bin number is consistent with the number of region histogram bins
+BinLabelList = SRBinLabelList
+signals = Signals[Era]
 
 for sig in signals:
 
@@ -43,9 +44,6 @@ for sig in signals:
     bsline.append("combineCards.py "+" ".join(cardcomb)+" > "+cname+"\n")
     bsline.append("echo 'combining datacards completed'\n")
     bsline.append("echo '.............................'\n")
-    bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
-    bsline.append("python3 ModCard.py --fname %s\n"%cname)
-    bsline.append("echo 'modification completed'\n")
     bsline.append("rm datacard_Bin*.txt\n")
     bsline.append("echo 'moving combined datacards to DataCard dir'\n")
     bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")
@@ -59,4 +57,4 @@ for sig in signals:
 
     os.system('chmod 744 CombineDataCardScript.sh')
     os.system('./CombineDataCardScript.sh')
-    os.system('rm CombineDataCardScript.sh')
+    os.system('rm CombineDataCardScript.sh lx.txt')

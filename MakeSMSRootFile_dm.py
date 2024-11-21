@@ -53,7 +53,7 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
     nbinsy = int((maxdm - mindm) / dm_step)
     minmstop -= 0.5*mstop_step
     maxmstop -= 0.5*mstop_step
-    print 'XMin: %4.2f, XMax: %4.2f, YMin: %4.2f, YMax: %4.2f, NXBins: %d, NYBins: %d' % (minmstop, maxmstop, mindm, maxdm, nbinsx, nbinsy)
+    print('XMin: %4.2f, XMax: %4.2f, YMin: %4.2f, YMax: %4.2f, NXBins: %d, NYBins: %d' % (minmstop, maxmstop, mindm, maxdm, nbinsx, nbinsy))
 
 
     hexp = ROOT.TH2D('hexp', '', nbinsx, minmstop, maxmstop, nbinsy, mindm, maxdm)
@@ -74,7 +74,7 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
             limits.append(signal + ': no limit found..')
         else:
             output = getLimit(rootFile)
-            print signal, ':\n', output
+            print(signal, ':\n', output)
             tempLimit = ''
             for line in output[0].split('\n'):
                 if 'Observed' in line:
@@ -101,9 +101,9 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
                     hobs.Fill(mstop, dm, limit['obs'] / xsec)
                     hobsdown.Fill(mstop, dm, limit['obs'] / xsecup)
                     hobsup.Fill(mstop, dm, limit['obs'] / xsecdown)
-                    print 'MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Exp Limit: %4.2f (+1 expt: %4.2f, -1 expt: %4.2f), Obs Limit: %4.2f (+1 theory: %4.2f, -1 theory: %4.2f), XS Limit: %4.2f exp, %4.2f obs' % (mstop, mlsp, dm, xsec, limit['0'] / xsec, limit['+1'] / xsec, limit['-1'] / xsec, limit['obs'] / xsec, limit['obs'] / xsecdown, limit['obs'] / xsecup, xseclimit, xsecobslimit)
+                    print('MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Exp Limit: %4.2f (+1 expt: %4.2f, -1 expt: %4.2f), Obs Limit: %4.2f (+1 theory: %4.2f, -1 theory: %4.2f), XS Limit: %4.2f exp, %4.2f obs' % (mstop, mlsp, dm, xsec, limit['0'] / xsec, limit['+1'] / xsec, limit['-1'] / xsec, limit['obs'] / xsec, limit['obs'] / xsecdown, limit['obs'] / xsecup, xseclimit, xsecobslimit))
                 else:
-                    print 'MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Limit: %4.2f (+1: %4.2f, -1: %4.2f), XS Limit: %4.2f' % (mstop, mlsp, dm, xsec, limit['0'] / xsec, limit['+1'] / xsec, limit['-1'] / xsec, xseclimit)
+                    print('MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Limit: %4.2f (+1: %4.2f, -1: %4.2f), XS Limit: %4.2f' % (mstop, mlsp, dm, xsec, limit['0'] / xsec, limit['+1'] / xsec, limit['-1'] / xsec, xseclimit))
             else:
                 xseclimit = limit['0'] * xsec
                 xsecobslimit = 0.0
@@ -115,9 +115,9 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
                     hobs.Fill(mstop, dm, limit['obs'])
                     hobsdown.Fill(mstop, dm, limit['obs'] * xsec / xsecup)
                     hobsup.Fill(mstop, dm, limit['obs'] * xsec / xsecdown)
-                    print 'MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Exp Limit: %4.2f (+1 expt: %4.2f, -1 expt: %4.2f), Obs Limit: %4.2f (+1 theory: %4.2f, -1 theory: %4.2f), XS Limit: %4.2f exp, %4.2f obs' % (mstop, mlsp, dm, xsec, limit['0'], limit['+1'], limit['-1'], limit['obs'], limit['obs'] * xsec / xsecdown, limit['obs'] * xsec / xsecup, xseclimit, xsecobslimit)
+                    print('MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Exp Limit: %4.2f (+1 expt: %4.2f, -1 expt: %4.2f), Obs Limit: %4.2f (+1 theory: %4.2f, -1 theory: %4.2f), XS Limit: %4.2f exp, %4.2f obs' % (mstop, mlsp, dm, xsec, limit['0'], limit['+1'], limit['-1'], limit['obs'], limit['obs'] * xsec / xsecdown, limit['obs'] * xsec / xsecup, xseclimit, xsecobslimit))
                 else:
-                    print 'MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Limit: %4.2f (+1: %4.2f, -1: %4.2f), XS Limit: %4.2f' % (mstop, mlsp, dm, xsec, limit['0'], limit['+1'], limit['-1'], xseclimit)
+                    print('MStop: %d, MLSP: %d, dm: %d, XS: %4.2f, Limit: %4.2f (+1: %4.2f, -1: %4.2f), XS Limit: %4.2f' % (mstop, mlsp, dm, xsec, limit['0'], limit['+1'], limit['-1'], xseclimit))
             hxsecexp.Fill(mstop, dm, xseclimit)
             hxsecobs.Fill(mstop, dm, xsecobslimit)
 
@@ -135,11 +135,11 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
     os.system('root -l -q -b makeScanPlots_dm.C\\(\\"%s\\",\\"%s\\",%d,%d\\)' %(limfilename, excfilename, expectedonly, interpolate))
 
     # print the results
-    print '=' * 5, 'RESULTS', '(' + limitmethod + ')', '=' * 5
-    print '\n'.join(limits)
-    print '\n'
+    print('=' * 5, 'RESULTS', '(' + limitmethod + ')', '=' * 5)
+    print('\n'.join(limits))
+    print('\n')
 
-signals = signals
+signals = signals(Era)
 limitFile = 'results_T2tt.root'
 exclusionFile = 'limit_scan_T2tt.root'
 if fillAsymptoticLimits: fillAsymptoticLimits(signals, limitFile, exclusionFile, addInterpolation)

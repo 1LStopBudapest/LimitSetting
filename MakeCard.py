@@ -21,7 +21,7 @@ bins = options.bins
 spoint = options.sig
 
 sbin = int(bins)
-BinLabel = SRBinLabelList + CRBinLabelList
+BinLabel = SRBinLabelList
 binlabel = BinLabel[sbin]
 signame = 'T2tt'
 

@@ -6,6 +6,7 @@ import math
 import ROOT
 from Config import *
 
+signals = Signals[Era]
 
 sigs = []
 for sig in signals:

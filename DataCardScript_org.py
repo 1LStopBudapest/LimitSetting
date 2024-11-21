@@ -21,7 +21,6 @@ for sig in signals:
     fsh.close()
     os.system('chmod 744 MakeDataCardScript.sh')
     os.system('./MakeDataCardScript.sh')
-    os.system('rm MakeDataCardScript.sh')
     os.system('ls datacard_Bin*.txt > ls.txt')
 
     df = {}
@@ -36,7 +35,7 @@ for sig in signals:
     for b in range(WBins):
         lt = BinLabelList[b]+"="+df[BinLabelList[b]]
         cardcomb.append(lt)
-
+    
     cname = "CCDataCard_T2tt_"+sig+".txt"
     bsline = []
     bsline.append("echo 'combining datacards for signal %s'\n"%sig)

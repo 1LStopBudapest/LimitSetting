@@ -16,10 +16,11 @@ proccs = sigs + bkgs + data
 txtline = []
 
 for proc in proccs:
-    txtline.append("python MakeTextFile.py --proc %s\n"%(proc))
+    txtline.append("python3 MakeTextFile.py --proc %s\n"%(proc))
    
 fsh = open("MakeTextFileScript.sh", "w")
 fsh.write(''.join(txtline))
 fsh.close()
 os.system('chmod 744 MakeTextFileScript.sh')
 os.system('./MakeTextFileScript.sh')
+os.system('rm MakeTextFileScript.sh')

@@ -109,8 +109,8 @@ class sms():
         # scan range to plot
         self.Xmin = 300.
         self.Xmax = 750.
-#         self.Ymin = 300.
-#         self.Ymax = 1000.
+        # self.Ymin = 300.
+        # self.Ymax = 1000.
         self.Ymin = 10.
         self.Ymax = 110.
         self.Zmin = 0.05
@@ -118,7 +118,7 @@ class sms():
         # produce sparticle
         self.sParticle = "m_{#tilde{t}_{1}} [GeV]"
         # LSP
-#         self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
+        # self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
         self.LSP = "#Deltam( #tilde{t}_{1}, #tilde{#chi}_{1}^{0} ) [GeV]"
         # turn off diagonal lines
         self.diagOn = False
@@ -135,8 +135,8 @@ class sms():
         # scan range to plot
         self.Xmin = 300.
         self.Xmax = 750.
-#         self.Ymin = 300.
-#         self.Ymax = 1000.
+        # self.Ymin = 300.
+        # self.Ymax = 1000.
         self.Ymin = 10.
         self.Ymax = 107.
         self.Zmin = 0.1
@@ -144,7 +144,7 @@ class sms():
         # produce sparticle
         self.sParticle = "m_{#tilde{t}_{1}} [GeV]"
         # LSP
-#         self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
+        # self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
         self.LSP = "#Deltam( #tilde{t}_{1}, #tilde{#chi}_{1}^{0} ) [GeV]"
         # turn off diagonal lines
         self.diagOn = False
@@ -159,8 +159,8 @@ class sms():
         # scan range to plot
         self.Xmin = 300.
         self.Xmax = 650.
-#         self.Ymin = 200.
-#         self.Ymax = 800.
+        # self.Ymin = 200.
+        # self.Ymax = 800.
         self.Ymin = 10.
         self.Ymax = 110.
         self.Zmin = 0.1
@@ -168,7 +168,7 @@ class sms():
         # produce sparticle
         self.sParticle = "m_{#tilde{t}_{1}} [GeV]"
         # LSP
-#         self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
+        # self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
         self.LSP = "#Deltam( #tilde{t}_{1}, #tilde{#chi}_{1}^{0} ) [GeV]"
         # turn off diagonal lines
         self.diagOn = False
@@ -193,7 +193,7 @@ class sms():
         self.LSP = "m_{#tilde{#chi}_{1}^{0}} [GeV]"
         # turn off diagonal lines
         self.diagOn = False
-	self.extraText = False
+        self.extraText = False
         
     def T1bbbb(self):
         # model name

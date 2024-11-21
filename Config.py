@@ -13,99 +13,34 @@ signals = ['1000_920']
 
 data = ['Data']
 bins = ['0', '1', ]
-sys = ['Lumi', 'PU', 'JEC', 'JER', 'leptonSF', 'nISR', 'wPt', 'BTag_l', 'BTag_b']
+sys = ['Lumi', 'nISR', 'PU', 'leptonSF', 'BTag_l', 'BTag_b', 'wPt', 'JEC', 'JER']
+LumiUnc = {
+    '2016PreVFP': 0.012,
+    '2016PostVFP': 0.012,
+    '2017': 0.023,
+    '2018': 0.025
+    }
+ISRUnc = 0.01
 
 sname = {'ttbar':'TTbar', 'SingleTop':'ST', 'WJets':'WJetsToLNu', 'TTX':'TTV', 'Zinv':'ZJetsToNuNu', 'DY':'DYJetsToLL', 'QCD':'QCD', 'VV':'VV', 'Data':'MET_Data'}
 
-CRBins = 12
-SRBins = 53
+CRBins = 1
+SRBins = 5
 
 SRBinLabelList = [
-    'SR1VLa',
-    'SR1La',
-    'SR1Ma',
-    'SR1Ha',
-    'SR1VHa',
-    'SR1VLb',
-    'SR1Lb',
-    'SR1Mb',
-    'SR1Hb',
-    'SR1VHb',
-    'SR1Lc',
-    'SR1Mc',
-    'SR1Hc',
-    'SR1VHc',
-    'SR1Ld',
-    'SR1Md',
-    'SR1Hd',
-    'SR1VHd',
-    'SR2VLa',
-    'SR2La',
-    'SR2Ma',
-    'SR2Ha',
-    'SR2VHa',
-    'SR2VLb',
-    'SR2Lb',
-    'SR2Mb',
-    'SR2Hb',
-    'SR2VHb',
-    'SR2Lc',
-    'SR2Mc',
-    'SR2Hc',
-    'SR2VHc',
-    'SR2Ld',
-    'SR2Md',
-    'SR2Hd',
-    'SR2VHd',
-    'SR3VLa',
-    'SR3La',
-    'SR3Ma',
-    'SR3Ha',
-    'SR3VHa',
-    'SR3VLb',
-    'SR3Lb',
-    'SR3Mb',
-    'SR3Hb',
-    'SR3VHb',
-    'SR3Lc',
-    'SR3Mc',
-    'SR3Hc',
-    'SR3VHc',
-    #'SR3Ld',
-    'SR3Md',
-    'SR3Hd',
-    'SR3VHd'
+    'SR1VLaX',
+    'SR1LaX',
+    'SR1MaX',
+    'SR1HaX',
+    'SR1VHaX'
 ]
 
 CRBinLabelList = [
-    'CR1a',
-    'CR1b',
-    'CR1c',
-    'CR1d',
-    'CR2a',
-    'CR2b',
-    'CR2c',
-    'CR2d',
-    'CR3a',
-    'CR3b',
-    'CR3c',
-    'CR3d'
+    'CR1aX'
 ]
 
 CRSRMap = coll.OrderedDict()
-CRSRMap['CR1a'] = ['SR1VLa', 'SR1La', 'SR1Ma', 'SR1Ha', 'SR1VHa']
-CRSRMap['CR1b'] = ['SR1VLb', 'SR1Lb', 'SR1Mb', 'SR1Hb', 'SR1VHb']
-CRSRMap['CR1c'] = ['SR1Lc', 'SR1Mc', 'SR1Hc', 'SR1VHc']
-CRSRMap['CR1d'] = ['SR1Ld', 'SR1Md', 'SR1Hd', 'SR1VHd']
-CRSRMap['CR2a'] = ['SR2VLa', 'SR2La', 'SR2Ma', 'SR2Ha', 'SR2VHa']
-CRSRMap['CR2b'] = ['SR2VLb', 'SR2Lb', 'SR2Mb', 'SR2Hb', 'SR2VHb']
-CRSRMap['CR2c'] = ['SR2Lc', 'SR2Mc', 'SR2Hc', 'SR2VHc']
-CRSRMap['CR2d'] = ['SR2Ld', 'SR2Md', 'SR2Hd', 'SR2VHd']
-CRSRMap['CR3a'] = ['SR3VLa', 'SR3La', 'SR3Ma', 'SR3Ha', 'SR3VHa']
-CRSRMap['CR3b'] = ['SR3VLb', 'SR3Lb', 'SR3Mb', 'SR3Hb', 'SR3VHb']
-CRSRMap['CR3c'] = ['SR3Lc', 'SR3Mc', 'SR3Hc', 'SR3VHc']
-#CRSRMap['CR3d'] = ['SR3Ld', 'SR3Md', 'SR3Hd', 'SR3VHd']
-CRSRMap['CR3d'] = ['SR3Md', 'SR3Hd', 'SR3VHd']
+CRSRMap['CR1aX'] = ['SR1VLaX', 'SR1LaX', 'SR1MaX', 'SR1HaX', 'SR1VHaX']
 
 scalesigtoacc = False
 addInterpolation = False

@@ -25,7 +25,7 @@ sname = '_T2tt_'+signal
 if not doScan:
     txtline = []
     cardname = 'DataCard/CCDataCard'+sname+'.txt'
-    txtline.append("combine -M AsymptoticLimits %s --name %s\n"%(cardname, sname))
+    txtline.append("combine -M AsymptoticLimits %s --run expected --name %s\n"%(cardname, sname))
     fsh = open("RunLimitScript.sh", "w")
     fsh.write(''.join(txtline))
     fsh.close()
@@ -34,7 +34,7 @@ if not doScan:
     print('Running limit for signal point: ', sname)
     print('......................')
     os.system('./RunLimitScript.sh')
-
+    os.system('rm RunLimitScript.sh')
 else:
     os.system('ls DataCard/CCDataCard*.txt > lsCard.txt')
     df = {}
@@ -47,7 +47,7 @@ else:
     print('......................')
     for i, (k, v) in enumerate(df.items()):
         txtline = []
-        txtline.append("combine -M AsymptoticLimits %s --name %s\n"%(k, v))
+        txtline.append("combine -M AsymptoticLimits %s --run expected --name %s\n"%(k, v))
         fsh = open("RunLimitScript_%i.sh"%i, "w")
         fsh.write(''.join(txtline))
         fsh.close()
@@ -56,3 +56,4 @@ else:
         print('Running limit for signal point: ',v)
         print('......................')
         os.system('./RunLimitScript_%i.sh'%i)
+        os.system('rm RunLimitScript_%i.sh'%i)

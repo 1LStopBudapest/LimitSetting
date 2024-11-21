@@ -30,35 +30,26 @@ scram b
 Get the limit directory
 
 ```
-git clone -b BKVal git@github.com:1LStopBudapest/LimitSetting.git
+git clone -b ExpectedLimitMC git@github.com:1LStopBudapest/LimitSetting.git
 
 cd LimitSetting
 mkdir DataCard
 
 ```
 
-Now we check how good is the fit in the CR of the validation region. Then we calculate the normalization from the CR and apply the normalization to Wjets & ttba processin the SR and check how good total MC agrees with data.
+Now we calculate the expected limit with MC events with the usual systematics included. More script will be added to calculate both expected and and observed limit using predicted SM backgrounds from control regions (CR).
 
-The second part can be done in two ways:
-First one is automatically done by combine tool through 'RateParam' implementation in the datacard. After running `FitDiagnostics`, prefit & postfit plots are drawn using `preFitPlot.py` & `postFitPlot.py` scripts respectively.
-
-
-Second option would be running the combine for CR bins only and get the normalisation (bin-wise) from pre & post fit histograms and apply the norm to the prefit SR histograms and compare data MC agreement. This is done using `NormCal.py`
-
-
-So we start with the region histograms and make the datacard with usual systematics included. We make region histograms for Wjets, ttbar and other SM  processes, also from the data. We make region histogram just for on signal point. Its for the placeholder in the datacard.
-
-One can make that by using `PromptBKValScript.py` in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
+For now we only consider the expected yield from MC in search regions (SR). So to get that we need to make region histograms for the signal and background processes.
+One can make that by using CountDCHistScript.py in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
 The above part can be done in local computer or in higgs machine.
 
 Then the important step is to copy those region root files to the File directory
 
 Go to where you produce these root files and use the following command to copy those into lxplus working directory
 ```
-scp path-to-the-files/PromptBKVal1_SR+CR*.root username@lxplus7.cern.ch:path-to-your-working-dir/CMSSW_10_2_13/src/LimitSetting/File/
+scp path-to-the-files/CountDCHist_SR*.root username@lxplus.cern.ch:path-to-your-working-dir/CMSSW_14_1_0_pre4/src/LimitSetting/File/
 
 ```
-For val2, root file will appear as PromptBKVal2_SR+CR_#precess.root
 
 
 Now back to lxplus working directory
@@ -70,7 +61,7 @@ cd LimitSetting
 
 ```
 
-Fist check Config.py to set the number of bins, processes, signal points etc. The bins (SR & CR) should be compatible with the Region histograms bins. Change the bin no & label while running for Val1 & Val2 regions
+Fist check Config.py to set the number of bins, processes, signal points etc. The bins (SR) should be compatible with the Region histograms bins.
 
 
 Make text files
@@ -84,18 +75,43 @@ python3 MakeTextFileScript.py
 
 Make datacard
 
-Inside LimitSetting direcotry run the following command to make the datacard and combine the cards.
-Make the datacard accrding to the choice of method as mentioned earlier
+Inside LimitSetting direcotry run the following command to make the datacard and combine the cards
 
 ```
 python3 DataCardScript.py
 
 ```
 
-Now we run the fitdiagnostic 
+Run Limit
 
 ```
-combineCards.py DataCard/CCDataCard_T2tt_1000_920.txt -S > myshapecard.txt
-combine -M FitDiagnostics myshapecard.txt --saveShapes --saveWithUncertainties
+python3 LimitRunScript.py
+
 ```
-This will create the output root file, fitDiagnosticsTest.root. Using this root file, we can create data-MC plot using the scripts as mentioned earlier.
+
+
+This will create the limit output root file for each signal. Now we need to make the exlusion limit plot. Here we use the package from https://github.com/CMS-SUS-XPAG/PlotsSMS  and modify it according to our purpose.
+
+But we first need to make the root file from which this plotting package make the limit plot.
+
+Run the following command
+
+```
+python SMSRootFileScript.py
+
+```
+Now go to PlotsSMS dir.
+
+```
+cd PlotsSMS
+
+```
+
+Run the following command to make the temperature plot
+
+```
+python python/makeSMSplots.py config/T2tt_dm_SUS.cfg T2tt
+
+```
+
+

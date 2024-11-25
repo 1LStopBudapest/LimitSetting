@@ -39,11 +39,14 @@ mkdir DataCard
 
 Now we calculate the expected limit with MC events with the usual systematics included. More script will be added to calculate both expected and and observed limit using predicted SM backgrounds from control regions (CR).
 
-For now we only consider the expected yield from MC in search regions (SR). So to get that we need to make region histograms for the signal and background processes.
-One can make that by using CountDCHistScript.py in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
+
+For now we only consider the expected yield from MC in search regions (SR) and also associated systemaics. So to get that we need to make region histograms for the signal and background processes.
+
+
+One can make those by using CountDCHistScript.py and CountDCHistJECScript.py in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
 The above part can be done in local computer or in higgs machine.
 
-Then the important step is to copy those region root files to the File directory
+Now copy those root files to the File directory
 
 Go to where you produce these root files and use the following command to copy those into lxplus working directory
 ```

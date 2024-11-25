@@ -57,4 +57,4 @@ for sig in signals:
 
     os.system('chmod 744 CombineDataCardScript.sh')
     os.system('./CombineDataCardScript.sh')
-    os.system('rm CombineDataCardScript.sh lx.txt')
+    os.system('rm CombineDataCardScript.sh ls.txt')

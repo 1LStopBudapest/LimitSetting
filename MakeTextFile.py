@@ -20,6 +20,7 @@ proc = options.proc
 
 year = Era
 signals = Signals[year]
+bins = SRBins
 
 isSignal = True if 'T2tt' in proc else False
 isData = True if 'Data' in proc else False
@@ -54,8 +55,14 @@ if isSignal:
         hWPt = f.Get('h_WPt_'+proc)
         hWPtu = f.Get('h_WPtUp_'+proc)
         hWPtd = f.Get('h_WPtDown_'+proc)
+        fjec = ROOT.TFile.Open('File/CountDCHistJEC_SR_T2tt_'+p+'.root')
+        hNom = fjec.Get('h_rate_'+proc)
+        hJECu = fjec.Get('h_JECUp_'+proc)
+        hJECd = fjec.Get('h_JECDown_'+proc)
+        hJERu = fjec.Get('h_JERUp_'+proc)
+        hJERd = fjec.Get('h_JERDown_'+proc)
         
-        for b in range(1, h.GetNbinsX() + 1):
+        for b in range(1, bins + 1):
             rate.append(h.GetBinContent(b))
             stat.append(h.GetBinError(b))
             Lumi.append(1.00 + LumiUnc[year])
@@ -65,8 +72,8 @@ if isSignal:
             BTag_b.append(1.00 + abs((hBTagSFbd.GetBinContent(b)-hBTagSFbu.GetBinContent(b))/(2 * hBTagSF.GetBinContent(b))))
             BTag_l.append(1.00 + abs((hBTagSFld.GetBinContent(b)-hBTagSFlu.GetBinContent(b))/(2 * hBTagSF.GetBinContent(b))))
             wPt.append(-1)
-            JEC.append(1.01)
-            JER.append(1.01)
+            JEC.append(1.00 + abs((hJECd.GetBinContent(b)-hJECu.GetBinContent(b))/(2 * hNom.GetBinContent(b))) if hNom.GetBinContent(b)!=0 else -1)
+            JER.append(1.00 + abs((hJERd.GetBinContent(b)-hJERu.GetBinContent(b))/(2 * hNom.GetBinContent(b))) if hNom.GetBinContent(b)!=0 else -1)
         
                 
         oname = 'File/'+proc+'.txt'
@@ -87,7 +94,7 @@ elif isData:
     rate = []
     f = ROOT.TFile.Open('File/CountDCHist_SR_'+sname[proc]+'.root')
     h = f.Get('h_rate_'+sname[proc])
-    for b in range(1, h.GetNbinsX() + 1):
+    for b in range(1, bins + 1):
         rate.append(h.GetBinContent(b))
     
     oname = 'File/'+proc+'.txt'
@@ -121,7 +128,13 @@ else:
     hWPt = f.Get('h_WPt_'+sname[proc])
     hWPtu = f.Get('h_WPtUp_'+sname[proc])
     hWPtd = f.Get('h_WPtDown_'+sname[proc])
-    for b in range(1, h.GetNbinsX() + 1):
+    fjec = ROOT.TFile.Open('File/CountDCHistJEC_SR_'+sname[proc]+'.root')
+    hNom = fjec.Get('h_rate_'+sname[proc])
+    hJECu = fjec.Get('h_JECUp_'+sname[proc])
+    hJECd = fjec.Get('h_JECDown_'+sname[proc])
+    hJERu = fjec.Get('h_JERUp_'+sname[proc])
+    hJERd = fjec.Get('h_JERDown_'+sname[proc])
+    for b in range(1, bins + 1):
         rate.append(h.GetBinContent(b))
         stat.append(h.GetBinError(b))
         Lumi.append(1.00 + LumiUnc[year])
@@ -131,9 +144,8 @@ else:
         BTag_b.append(1.00 + abs((hBTagSFbd.GetBinContent(b)-hBTagSFbu.GetBinContent(b))/(2 * hBTagSF.GetBinContent(b))) if hBTagSF.GetBinContent(b)!=0 else -1)
         BTag_l.append(1.00 + abs((hBTagSFld.GetBinContent(b)-hBTagSFlu.GetBinContent(b))/(2 * hBTagSF.GetBinContent(b))) if hBTagSF.GetBinContent(b)!=0 else -1)
         wPt.append((1.00 + abs((hWPtd.GetBinContent(b)-hWPtu.GetBinContent(b))/(2 * hWPt.GetBinContent(b))) if hWPt.GetBinContent(b)!=0 else -1) if 'WJet' in proc else -1)
-        JEC.append(1.01)
-        JER.append(1.01)
-            
+        JEC.append(1.00 + abs((hJECd.GetBinContent(b)-hJECu.GetBinContent(b))/(2 * hNom.GetBinContent(b))) if hNom.GetBinContent(b)!=0 else -1)
+        JER.append(1.00 + abs((hJERd.GetBinContent(b)-hJERu.GetBinContent(b))/(2 * hNom.GetBinContent(b))) if hNom.GetBinContent(b)!=0 else -1)
         
     oname = 'File/'+proc+'.txt'
     with open(oname,'w') as ofile:

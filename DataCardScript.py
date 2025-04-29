@@ -6,8 +6,15 @@ import math
 import ROOT
 from Config import *
 
-WBins = SRBins #make sure the bin number is consistent with the number of region histogram bins
-BinLabelList = SRBinLabelList
+
+CRFlag =  True if PromptNorm else False
+if CRFlag:
+    WBins = SRBins #make sure the bin number is consistent with the number of region histogram bins
+    BinLabelList = SRBinLabelList
+else:
+    WBins = SRBins + CRBins #make sure the bin number is consistent with the number of region histogram bins                                                       
+    BinLabelList = SRBinLabelList  + CRBinLabelList
+
 signals = Signals[Era]
 
 for sig in signals:
@@ -15,7 +22,8 @@ for sig in signals:
     txtline = []
     txtline.append("echo 'Making datacards from the text files'\n")
     for b in range(WBins):
-        txtline.append("python3 MakeCard.py --bins %i --sig %s\n"%(b, sig))
+        if CRFlag: txtline.append("python3 MakeCard.py --bins %i --sig %s --CR on\n"%(b, sig))
+        else: txtline.append("python3 MakeCard.py --bins %i --sig %s\n"%(b, sig))
     txtline.append("echo 'Making datacards completed'\n")
     fsh = open("MakeDataCardScript.sh", "w")
     fsh.write(''.join(txtline))
@@ -44,6 +52,11 @@ for sig in signals:
     bsline.append("combineCards.py "+" ".join(cardcomb)+" > "+cname+"\n")
     bsline.append("echo 'combining datacards completed'\n")
     bsline.append("echo '.............................'\n")
+    if CRFlag:
+        bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
+        bsline.append("python3 ModCard.py --fname %s\n"%cname)
+        bsline.append("echo 'modification completed'\n")
+        bsline.append("echo '.............................'\n")
     bsline.append("rm datacard_Bin*.txt\n")
     bsline.append("echo 'moving combined datacards to DataCard dir'\n")
     bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")

@@ -13,15 +13,20 @@ def get_parser():
     argParser = argparse.ArgumentParser(description = "Argument parser")
     argParser.add_argument('--bins',           action='store',                     type=str,            default='0',         help="Which bin?" )
     argParser.add_argument('--sig',            action='store',                     type=str,            default='1000_920',   help="Which signal sample point?" )
+    argParser.add_argument('--CR',           action='store',                     type=str,            default='off',         help="Which bin?" )
     return argParser
 
 options = get_parser().parse_args()
                            
 bins = options.bins
 spoint = options.sig
+crbins = options.CR
 
 sbin = int(bins)
-BinLabel = SRBinLabelList
+if crbins == 'off':
+    BinLabel = SRBinLabelList
+else:
+    BinLabel = SRBinLabelList + CRBinLabelList
 binlabel = BinLabel[sbin]
 signame = 'T2tt'
 

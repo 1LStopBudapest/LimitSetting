@@ -37,7 +37,7 @@ mkdir DataCard
 
 ```
 
-Now we calculate the expected limit with MC events with the usual systematics included. More script will be added to calculate both expected and and observed limit using predicted SM backgrounds from control regions (CR).
+Now we calculate the expected limit with MC events with the usual systematics included.
 
 
 For now we only consider the expected yield from MC in search regions (SR) and also associated systemaics. So to get that we need to make region histograms for the signal and background processes.
@@ -45,6 +45,8 @@ For now we only consider the expected yield from MC in search regions (SR) and a
 
 One can make those by using CountDCHistScript.py and CountDCHistJECScript.py in NanoTuplePlot. Please check the link, https://github.com/1LStopBudapest/NanoTuplePlot
 The above part can be done in local computer or in higgs machine.
+While running CountDCHistScript.py and CountDCHistJECScript.py, use --region 'SR' option
+
 
 Now copy those root files to the File directory
 
@@ -118,3 +120,15 @@ python python/makeSMSplots.py config/T2tt_dm_SUS.cfg T2tt
 ```
 
 
+To run with new BK composition
+
+
+Inside Config.py, a variable namely BKmode is set to 'old' by default, one need to change it to 'new' to have new BK composition. Also, it is necessary to have the region histogram in that new BK format. One can get the new root files from the root files prduced by CountDCHistScript.py and CountDCHistJECScript.py. Assuming one already produced files by CountDCHistScript.py and CountDCHistJECScript.py, new format root files can be obtained by running 'BKDivision.py' which is provided inside Helper directory. The above part can be done in local computer or in higgs machine where Helper is already checked out.
+
+
+To run with Prompt normalization from CR bins
+
+
+There is another flag inside Config.py called 'PromptNorm' set to default valuse as False so that the limit is calculated with only the expected yield from BKs. If you want to scale the yield of prompt BKs with the normalization from CR, then set the 'PromptNorm' to True.
+
+Also you need to rerun the CountDCHistScript.py and CountDCHistJECScript.py with --region option as 'SR+CR' in local computer or in higgs machine to produce the root files used to make the datacard.

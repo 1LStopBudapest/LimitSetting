@@ -131,4 +131,8 @@ To run with Prompt normalization from CR bins
 
 There is another flag inside Config.py called 'PromptNorm' set to default valuse as False so that the limit is calculated with only the expected yield from BKs. If you want to scale the yield of prompt BKs with the normalization from CR, then set the 'PromptNorm' to True.
 
-Also you need to rerun the CountDCHistScript.py and CountDCHistJECScript.py with --region option as 'SR+CR' in local computer or in higgs machine to produce the root files used to make the datacard.
+
+First, you need to rerun the CountDCHistScript.py and CountDCHistJECScript.py with --region option as 'SR+CR' in local computer or in higgs machine to produce the root files used to make the datacard.
+
+
+Also, please change the input root files names from 'CountDCHist_SR_'('CountDCHistJEC_SR_') to CountDCHist_SR+CR_'(CountDCHistJEC_SR+CR_) in MakeTextFile.py

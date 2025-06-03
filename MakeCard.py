@@ -105,5 +105,5 @@ with open(oname,'w') as ofile:
     ofile.write('-'*divider+"\n")
     for s in syst:
         ofile.write(syst[s]+"\n")
-    #for st in stat:
-        #ofile.write(stat[st]+"\n")
+    for st in stat:
+        ofile.write(stat[st]+"\n")

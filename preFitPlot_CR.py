@@ -8,47 +8,10 @@ from Config import *
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
-Nbins = CRBins
-NbinLabel = CRBinLabelList
+#plot.ModTDRStyle()
 
-Nfin = ROOT.TFile("fitDiagnosticsTest.root")
-pre_dir = "shapes_prefit"
-post_dir = "shapes_fit_b"
-
-wCRN = coll.OrderedDict()
-tCRN = coll.OrderedDict()
-wSRN = coll.OrderedDict()
-tSRN = coll.OrderedDict()
-
-for b in range(Nbins):
-    second_dir = "ch1_"+NbinLabel[b]
-    pre_WJets = Nfin.Get(pre_dir + "/" + second_dir + "/WJets")
-    pre_ttbar = Nfin.Get(pre_dir + "/" + second_dir + "/ttbar")
-    post_WJets = Nfin.Get(post_dir + "/" + second_dir + "/WJets")
-    post_ttbar = Nfin.Get(post_dir + "/" + second_dir + "/ttbar")
-
-    if pre_WJets and post_WJets:
-        NWJets = post_WJets.GetBinContent(1)/pre_WJets.GetBinContent(1)
-    else:
-        NWJets = 1
-    wCRN[NbinLabel[b]] = NWJets
-    if pre_ttbar and post_ttbar:
-        Nttbar = post_ttbar.GetBinContent(1)/pre_ttbar.GetBinContent(1)
-    else:
-        Nttbar = 1
-    tCRN[NbinLabel[b]] = Nttbar
-
-cnt = 0
-for CRbin in CRSRMap:
-    for sbin in CRSRMap[CRbin]:
-        wSRN[cnt] = wCRN[CRbin]
-        tSRN[cnt] = tCRN[CRbin]
-        cnt = cnt+1
-        
-#Plot.ModTDRStyle()
-
-bins = SRBins
-binLabel = SRBinLabelList
+bins = CRBins
+binLabel = CRBinLabelList
 
 hWJets = ROOT.TH1F('hWJets', 'hWJets', bins, 0, bins)
 httbar = ROOT.TH1F('httbar', 'ttbar', bins, 0, bins)
@@ -70,7 +33,7 @@ for b in range(bins):
     hZinv.GetXaxis().SetBinLabel(b+1, binLabel[b])
     hdata.GetXaxis().SetBinLabel(b+1, binLabel[b])
 
-fin = ROOT.TFile("fitDiagnosticsTest_SR.root")
+fin = ROOT.TFile("fitDiagnosticsTest.root")
 first_dir = "shapes_prefit"
 
 for b in range(bins):
@@ -134,17 +97,10 @@ for b in range(bins):
         hZinv.SetBinError(b+1, h_Zinv.GetBinError(1)) 
     else:
         hZinv.SetBinContent(b+1, 0)
+        
+    #print(b,' ',binLabel[b],' : ','VV: ', hVV.GetBinContent(b+1),'  TTX: ',hTTX.GetBinContent(b+1),' DY: ',hDY.GetBinContent(b+1),' hSingleTop: ',hSingleTop.GetBinContent(b+1),' ttbar: ',httbar.GetBinContent(b+1),' WJets: ',hWJets.GetBinContent(b+1),' data: ',h_dat.GetY()[0])
+        
 
-
-
-
-for b in range(hWJets.GetNbinsX()):
-    s = hWJets.GetBinContent(b+1) * wSRN[b]
-    hWJets.SetBinContent(b+1, s)
-for b in range(httbar.GetNbinsX()):
-    s = httbar.GetBinContent(b+1) * tSRN[b]
-    httbar.SetBinContent(b+1, s)
-    
 legend = ROOT.TLegend(0.40, 0.60, 0.90, 0.9)
 legend.SetNColumns(3)
 
@@ -243,5 +199,5 @@ p2.Draw()
 p2.cd()
 hRatio.Draw("PE")
 hRatioFrame.Draw("HISTsame")
-c.SaveAs("PromptBKVal2_Normplot.png")
+c.SaveAs("PromptBKVal2_prefitplot_CR.png")
 c.Close()

@@ -70,7 +70,7 @@ cd LimitSetting
 
 ```
 
-Fist check Config.py to set the number of bins, processes, signal points etc. The bins (SR & CR) should be compatible with the Region histograms bins. Change the bin no & label while running for Val1 & Val2 regions
+Fist check Config.py to set the number of bins, processes, signal points etc. The bins (SR & CR) should be compatible with the Region histograms bins. Change the value of reg variable to Val1 & Val2 according to region of your choice.
 
 
 Make text files
@@ -99,3 +99,8 @@ combineCards.py DataCard/CCDataCard_T2tt_1000_920.txt -S > myshapecard.txt
 combine -M FitDiagnostics myshapecard.txt --saveShapes --saveWithUncertainties
 ```
 This will create the output root file, fitDiagnosticsTest.root. Using this root file, we can create data-MC plot using the scripts as mentioned earlier.
+
+```
+python3 preFitPlot.py
+python3 postFitPlot.py
+```

@@ -104,3 +104,16 @@ This will create the output root file, fitDiagnosticsTest.root. Using this root 
 python3 preFitPlot.py
 python3 postFitPlot.py
 ```
+
+Obtain the values of prompt BK normlization factors (rateParam)
+
+We can obtain the rateParam values from the fitDiagnosticsTest.root file.
+
+```
+root -l fitDiagnosticsTest.root
+_file0->ls()
+RooFitResult *fitb = (RooFitResult*)_file0->Get("fit_b")
+fitb->Print()
+```
+
+We can also get the normalization factors from 'fit_s' too.

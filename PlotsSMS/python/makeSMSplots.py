@@ -10,7 +10,7 @@ if __name__ == '__main__':
     modelname = sys.argv[1].split("/")[-1].split("_")[0] + '_' + sys.argv[1].split("/")[-1].split("_")[1]
     analysisLabel = sys.argv[1].split("/")[-1].split("_")[2]
     outputname = sys.argv[2]
-    print 'config filename: ', filename, ' modelname: ', modelname, ' analysisLabel: ', analysisLabel, ' outputname: ', outputname
+    print ('config filename: ', filename, ' modelname: ', modelname, ' analysisLabel: ', analysisLabel, ' outputname: ', outputname)
     # read the config file
     fileIN = inputFile(filename)
     

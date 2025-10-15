@@ -89,13 +89,13 @@ class smsPlotABS(object):
         graphWhite.Draw("LSAME")
         self.c.graphWhite = graphWhite
        	CMS_lumi.writeExtraText = 1
-	CMS_lumi.extraText = "Preliminary"
-	CMS_lumi.lumi_13TeV="35.9 fb^{-1}"
+        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.lumi_13TeV="35.9 fb^{-1}"
 	#CMS_lumi.lumi_13TeV="137.0 fb^{-1}"
 
-	CMS_lumi.lumi_sqrtS = "13 TeV"  
-	iPos=0
-	CMS_lumi.CMS_lumi(self.c,4, iPos)
+        CMS_lumi.lumi_sqrtS = "13 TeV"
+        iPos=0
+        CMS_lumi.CMS_lumi(self.c,4, iPos)
         # CMS LABEL
         textCMS = rt.TLatex(0.25,0.96,"  %s " %(self.preliminary))
         textCMS.SetNDC()

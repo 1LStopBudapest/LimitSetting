@@ -6,31 +6,21 @@ import math
 import ROOT
 from Config import *
 
-
-CRFlag =  True if PromptNorm else False
-if CRFlag:
-    WBins = SRBins #make sure the bin number is consistent with the number of region histogram bins
-    BinLabelList = SRBinLabelList
-else:
-    WBins = SRBins + CRBins #make sure the bin number is consistent with the number of region histogram bins                                                       
-    BinLabelList = SRBinLabelList  + CRBinLabelList
-
-signals = Signals[Era]
+WBins = SRBins + CRBins #make sure the bin number is consistent with the number of region histogram bins
+BinLabelList = SRBinLabelList  + CRBinLabelList
 
 for sig in signals:
 
     txtline = []
     txtline.append("echo 'Making datacards from the text files'\n")
     for b in range(WBins):
-        if CRFlag: txtline.append("python3 MakeCard.py --bins %i --sig %s --CR on\n"%(b, sig))
-        else: txtline.append("python3 MakeCard.py --bins %i --sig %s\n"%(b, sig))
+        txtline.append("python3 MakeCard.py --bins %i --sig %s\n"%(b, sig))
     txtline.append("echo 'Making datacards completed'\n")
     fsh = open("MakeDataCardScript.sh", "w")
     fsh.write(''.join(txtline))
     fsh.close()
     os.system('chmod 744 MakeDataCardScript.sh')
     os.system('./MakeDataCardScript.sh')
-    os.system('rm MakeDataCardScript.sh')
     os.system('ls datacard_Bin*.txt > ls.txt')
 
     df = {}
@@ -45,18 +35,16 @@ for sig in signals:
     for b in range(WBins):
         lt = BinLabelList[b]+"="+df[BinLabelList[b]]
         cardcomb.append(lt)
-
+    
     cname = "CCDataCard_T2tt_"+sig+".txt"
     bsline = []
     bsline.append("echo 'combining datacards for signal %s'\n"%sig)
     bsline.append("combineCards.py "+" ".join(cardcomb)+" > "+cname+"\n")
     bsline.append("echo 'combining datacards completed'\n")
     bsline.append("echo '.............................'\n")
-    if CRFlag:
-        bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
-        bsline.append("python3 ModCard.py --fname %s\n"%cname)
-        bsline.append("echo 'modification completed'\n")
-        bsline.append("echo '.............................'\n")
+    bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
+    bsline.append("python3 ModCard.py --fname %s\n"%cname)
+    bsline.append("echo 'modification completed'\n")
     bsline.append("rm datacard_Bin*.txt\n")
     bsline.append("echo 'moving combined datacards to DataCard dir'\n")
     bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")
@@ -70,4 +58,4 @@ for sig in signals:
 
     os.system('chmod 744 CombineDataCardScript.sh')
     os.system('./CombineDataCardScript.sh')
-    os.system('rm CombineDataCardScript.sh ls.txt')
+    os.system('rm CombineDataCardScript.sh')

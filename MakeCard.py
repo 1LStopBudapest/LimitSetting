@@ -25,11 +25,12 @@ crbins = options.CR
 sbin = int(bins)
 if crbins == 'off':
     BinLabel = SRBinLabelList
-else:
+else: #in this case, make sure text files were made(MakeTextFile.py) with CR contribution
     BinLabel = SRBinLabelList + CRBinLabelList
 binlabel = BinLabel[sbin]
-signame = 'T2tt'
+year = Era
 
+signame = 'T2tt'
 sig = signame+'_'+spoint
 procnames = [signame] + bkgs 
 procs = [sig] + bkgs
@@ -42,22 +43,22 @@ rate = []
 syst = {}
 stat = {}
 
-for s in sys:
+for s in sysUnc:
     syst[s] = s+' lnN '
     for proc in procs:
-        infile = 'File/'+proc+'.txt'
+        infile = 'File/'+year+'/'+proc+'.txt'
         with open(infile,'r') as ifile:
             for line in ifile:
                 line = line.rstrip()
                 linesplit = line.split(',')
-                if linesplit[0]==s:
+                if linesplit[0]==sysname[s]:
                     si = linesplit[sbin+1] if linesplit[sbin+1]!='-1' else "-"
         syst[s] = syst[s] +si+' '
         
 for proc in procs:
     skey = 'Stat_'+binlabel+'_signal' if 'T2tt' in proc else 'Stat_'+binlabel+'_'+proc
     stat[skey] = skey+' lnN '
-    infile = 'File/'+proc+'.txt'
+    infile = 'File/'+year+'/'+proc+'.txt'
     st = 1
     nom  = 1
     with open(infile,'r') as ifile:
@@ -73,7 +74,7 @@ for proc in procs:
         stat[skey] = stat[skey] + str(stunc) +' ' if p ==proc else stat[skey] + '-'+' '
 
 
-with open('File/Data.txt','r') as ifile:
+with open('File/'+year+'/'+'Data.txt','r') as ifile:
         for line in ifile:
             line = line.rstrip()
             linesplit = line.split(',')
@@ -81,7 +82,7 @@ with open('File/Data.txt','r') as ifile:
                 obs = int(float(linesplit[sbin+1]))
 
 for proc in procs:
-    infile = 'File/'+proc+'.txt'
+    infile = 'File/'+year+'/'+proc+'.txt'
     with open(infile,'r') as ifile:
         for line in ifile:
             line = line.rstrip()

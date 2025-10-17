@@ -18,7 +18,6 @@ else:
 signals = Signals[Era]
 
 for sig in signals:
-
     txtline = []
     txtline.append("echo 'Making datacards from the text files'\n")
     for b in range(WBins):
@@ -32,7 +31,33 @@ for sig in signals:
     os.system('./MakeDataCardScript.sh')
     os.system('rm MakeDataCardScript.sh')
     os.system('ls datacard_Bin*.txt > ls.txt')
-
+    skipbins = False
+    
+    #Modification for zero signal yeild bins                                                                                                                            
+    os.system("echo '.....................'\n")
+    os.system("echo 'Handling zero signal yield SR bins'\n")
+    os.system('python3 YieldCheck.py')
+    if os.path.isfile('SkippingBinsList.py'):
+        skipbins = True
+        from SkippingBinsList import ZsigSRbins, ZtBKSRbins
+        zsbins = len(ZsigSRbins)
+        WBins = WBins-zsbins
+        rBinLabelList = [bl for bl in BinLabelList if f"Bin{bl}" not in ZsigSRbins]
+        BinLabelList = rBinLabelList
+        zbkbins = len(ZtBKSRbins)
+        WBins = WBins-zbkbins
+        rBinLabelList = [bl for bl in BinLabelList if f"Bin{bl}" not in ZtBKSRbins]
+        BinLabelList = rBinLabelList
+        for b in ZsigSRbins:
+            os.system(f"rm datacard_{b}.txt")
+        for b in ZtBKSRbins:
+            os.system(f"rm datacard_{b}.txt")
+        os.system('rm ls.txt')
+        os.system('ls datacard_Bin*.txt > ls.txt')
+    else:
+        print('No Zero yield SR bins found')
+        os.system("echo '.....................'\n")
+        
     df = {}
     with open('ls.txt','r') as ifile:
         for line in ifile:
@@ -54,10 +79,12 @@ for sig in signals:
     bsline.append("echo '.............................'\n")
     if CRFlag:
         bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
-        bsline.append("python3 ModCard.py --fname %s\n"%cname)
+        if skipbins: bsline.append("python3 ModCard.py --fname %s --skipbin True\n"%cname)
+        else: bsline.append("python3 ModCard.py --fname %s\n"%cname)
         bsline.append("echo 'modification completed'\n")
         bsline.append("echo '.............................'\n")
-    bsline.append("rm datacard_Bin*.txt\n")
+        bsline.append("echo 'Deleting datacard_Bin*.txt, SkippingBinsList.py, ls.txt'\n")
+    bsline.append("rm datacard_Bin*.txt SkippingBinsList.py ls.txt\n")
     bsline.append("echo 'moving combined datacards to DataCard dir'\n")
     bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")
     bsline.append("echo 'combine datacard process completed'\n")
@@ -70,4 +97,4 @@ for sig in signals:
 
     os.system('chmod 744 CombineDataCardScript.sh')
     os.system('./CombineDataCardScript.sh')
-    os.system('rm CombineDataCardScript.sh ls.txt')
+    os.system('rm CombineDataCardScript.sh')

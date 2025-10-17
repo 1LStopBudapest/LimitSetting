@@ -11,7 +11,7 @@ class inputFile():
         self.OBSERVED = self.findOBSERVED(fileName)
         self.LUMI = self.findATTRIBUTE(fileName, "LUMI")
         self.ENERGY = self.findATTRIBUTE(fileName, "ENERGY")
-        print (self.ENERGY)
+        #print (self.ENERGY, self.LUMI)
         self.PRELIMINARY = self.findATTRIBUTE(fileName, "PRELIMINARY")
 
     def findATTRIBUTE(self, fileName, attribute):

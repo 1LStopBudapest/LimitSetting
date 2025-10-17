@@ -1,0 +1,113 @@
+#! /usr/bin/python                                                                                                                                                      
+
+import os
+import sys
+import math
+import ROOT
+from Config import *
+
+def get_parser():
+    ''' Argument parser.
+    '''
+    import argparse
+    argParser = argparse.ArgumentParser(description = "Argument parser")
+    argParser.add_argument('--sidx',           action='store',                     type=int,            default='0',         help="Which signal index from signal list?" )
+    return argParser
+
+options = get_parser().parse_args()
+sigid = options.sidx
+
+CRFlag =  False #True if PromptNorm else False
+if CRFlag:
+    WBins = SRBins + CRBins #make sure the bin number is consistent with the number of region histogram bins                                                       
+    BinLabelList = SRBinLabelList  + CRBinLabelList
+else:
+    WBins = SRBins #make sure the bin number is consistent with the number of region histogram bins
+    BinLabelList = SRBinLabelList
+
+signals = Signals[Era]
+sig = signals[sigid]
+
+txtline = []
+txtline.append("echo 'Making datacards from the text files'\n")
+for b in range(WBins):
+    txtline.append("echo 'Making datacards for bin %s'\n"%b)
+    if CRFlag: txtline.append("python3 MakeCard.py --bins %i --sig %s --CR on\n"%(b, sig))
+    else: txtline.append("python3 MakeCard.py --bins %i --sig %s --CR off\n"%(b, sig))
+txtline.append("echo 'Making datacards completed'\n")
+fsh = open("MakeDataCardScript.sh", "w")
+fsh.write(''.join(txtline))
+fsh.close()
+os.system('chmod 744 MakeDataCardScript.sh')
+os.system('./MakeDataCardScript.sh')
+os.system('rm MakeDataCardScript.sh')
+    
+os.system('ls datacard_Bin*.txt > ls.txt')
+skipbins = False
+
+#Modification for zero signal yeild bins                                                                                                                             
+os.system("echo '.....................'\n")
+os.system("echo 'Handling zero signal yield SR bins'\n")
+os.system('python3 YieldCheck.py')
+if os.path.isfile('SkippingBinsList.py'):
+    skipbins = True
+    from SkippingBinsList import ZsigSRbins, ZtBKSRbins
+    zsbins = len(ZsigSRbins)
+    WBins = WBins-zsbins
+    rBinLabelList = [bl for bl in BinLabelList if f"Bin{bl}" not in ZsigSRbins]
+    BinLabelList = rBinLabelList
+    zbkbins = len(ZtBKSRbins)
+    WBins = WBins-zbkbins
+    rBinLabelList = [bl for bl in BinLabelList if f"Bin{bl}" not in ZtBKSRbins]
+    BinLabelList = rBinLabelList
+    for b in ZsigSRbins:
+        os.system(f"rm datacard_{b}.txt")
+    for b in ZtBKSRbins:
+        os.system(f"rm datacard_{b}.txt")
+    os.system('rm ls.txt')
+    os.system('ls datacard_Bin*.txt > ls.txt')
+else:
+    print('No Zero yield SR bins found')
+    os.system("echo '.....................'\n")
+
+    
+df = {}
+with open('ls.txt','r') as ifile:
+    for line in ifile:
+        line = line.rstrip()
+        k = line.replace("datacard_Bin","")
+        k = k.replace(".txt","")
+        df[k]= line
+
+cardcomb = []
+for b in range(WBins):
+    lt = BinLabelList[b]+"="+df[BinLabelList[b]]
+    cardcomb.append(lt)
+        
+cname = "CCDataCard_T2tt_"+sig+".txt"
+bsline = []
+bsline.append("echo 'combining datacards for signal %s'\n"%sig)
+bsline.append("combineCards.py "+" ".join(cardcomb)+" > "+cname+"\n")
+bsline.append("echo 'combining datacards completed'\n")
+bsline.append("echo '.............................'\n")
+if CRFlag:
+    bsline.append("echo 'Modifying datacards to add Prompt BK normalization'\n")
+    if skipbins: bsline.append("python3 ModCard.py --fname %s --skipbin True\n"%cname)
+    else: bsline.append("python3 ModCard.py --fname %s\n"%cname)
+    bsline.append("echo 'modification completed'\n")
+    bsline.append("echo '.............................'\n")
+bsline.append("echo 'Deleting datacard_Bin*.txt, SkippingBinsList.py, ls.txt'\n")
+bsline.append("rm datacard_Bin*.txt SkippingBinsList.py ls.txt\n")
+bsline.append("echo 'moving combined datacards to DataCard dir'\n")
+bsline.append("mv CCDataCard_T2tt_*.txt DataCard/\n")
+bsline.append("echo 'combine datacard process completed'\n")
+bsline.append("echo '.....................'\n")
+bsline.append("echo '.....................'\n")
+
+bsh = open("CombineDataCardScript.sh", "w")
+bsh.write(''.join(bsline))
+bsh.close()
+
+os.system('chmod 744 CombineDataCardScript.sh')
+os.system('./CombineDataCardScript.sh')
+os.system('rm CombineDataCardScript.sh')

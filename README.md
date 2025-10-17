@@ -2,6 +2,10 @@ This works within CMSSW environment. So please log in to your lxplus account.
 The following setup works in el9 on lxplus (latest one). Now its python3
 
 
+Also here, we are using cut-and-count datacard. For Shape datacrad, check ShapeDC branch
+
+
+
 Set up a CMSSW area
 
 ```
@@ -97,12 +101,38 @@ python3 LimitRunScript.py
 
 This will create the limit output root file for each signal. Now we need to make the exlusion limit plot. Here we use the package from https://github.com/CMS-SUS-XPAG/PlotsSMS  and modify it according to our purpose.
 
+
+Making datacard and running fitfor all signal points take time, therefore condor script is added to parallelize jobs for each signal points. So after making the tes]xt file (python3 MakeTextFileScript.py), please do the following:
+
+```
+cd ../../../
+tar -zcvf CMSSW_14_1_0_pre4.tar.gz CMSSW_14_1_0_pre4
+mv CMSSW_14_1_0_pre4.tar.gz CMSSW_14_1_0_pre4/src/LimitSetting/condor/
+cd CMSSW_14_1_0_pre4/src/LimitSetting/condor/
+```
+
+Now inside condor directory, run the condorscript
+
+```
+python3 condorScript.py
+```
+
+When the condor jobs are done, run the following scripts.
+```
+python3 Rename_condorfile.py
+```
+Sometimes, some jobs might fails, so you can check those and rerun the condor for only those signal points. In that case run the following script instead
+```
+python3 Rename_condorProbSol.py
+```
+
+Now for plotting, go back to LimitSetting directory (cd ../).
 But we first need to make the root file from which this plotting package make the limit plot.
 
 Run the following command
 
 ```
-python SMSRootFileScript.py
+python3 SMSRootFileScript.py
 
 ```
 Now go to PlotsSMS dir.
@@ -115,7 +145,7 @@ cd PlotsSMS
 Run the following command to make the temperature plot
 
 ```
-python python/makeSMSplots.py config/T2tt_dm_SUS.cfg T2tt
+python3 python/makeSMSplots.py config/T2tt_dm_SUS.cfg T2tt
 
 ```
 
@@ -136,3 +166,5 @@ First, you need to rerun the CountDCHistScript.py and CountDCHistJECScript.py wi
 
 
 Also, please change the input root files names from 'CountDCHist_SR_'('CountDCHistJEC_SR_') to CountDCHist_SR+CR_'(CountDCHistJEC_SR+CR_) in MakeTextFile.py
+
+Another important thing, several signal points have zero signal yield in several SR bins. This causes combine fiting to fail. Alos if any SR bin has zero or negative total background yiled, fit fails in that case too. To avoid this, we skip those bins in the datacard. Extra scripts are added to handle this issue.

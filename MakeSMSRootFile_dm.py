@@ -110,7 +110,7 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
                 hexp.Fill(mstop, dm, limit['0'])
                 hexpdown.Fill(mstop, dm, limit['-1'])
                 hexpup.Fill(mstop, dm, limit['+1'])
-                if limit.has_key('obs'):
+                if 'obs' in limit:
                     xsecobslimit = limit['obs'] * xsec
                     hobs.Fill(mstop, dm, limit['obs'])
                     hobsdown.Fill(mstop, dm, limit['obs'] * xsec / xsecup)
@@ -139,7 +139,7 @@ def fillAsymptoticLimits(signals, limfilename, excfilename, interpolate):
     print('\n'.join(limits))
     print('\n')
 
-signals = signals(Era)
+signals = Signals[Era]
 limitFile = 'results_T2tt.root'
 exclusionFile = 'limit_scan_T2tt.root'
 if fillAsymptoticLimits: fillAsymptoticLimits(signals, limitFile, exclusionFile, addInterpolation)

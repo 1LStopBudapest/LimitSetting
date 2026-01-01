@@ -44,10 +44,13 @@ Now we calculate the limit with the usual systematics included. Combine tool bas
 The README in master or other branch explain how the limit script works. Here the workflow of the plotting script will be described.
 
 Extraction and combining r value whole signal spectra.
-This is done in MakeSMSRootFile_dm.py
-The output root file from each signal has a tree called 'limit' which contains some branches of which two branches are usefull to us: quantileExpected and limit that corresponds to r value.
+
+This is done in MakeSMSRootFile_dm.py. The output root file from each signal has a tree called 'limit' which contains some branches of which two branches are usefull to us: quantileExpected and limit that corresponds to r value.
+
 Inside MakeSMSRootFile_dm.py, getLimit() function extract the r value and assign it to observed, expected, expected+1sigma, expected-1sigma limit dictionary according to the value of quantileExpected.
+
 Now inside fillAsymptoticLimits() function, 8 2D histograms are defined to store the limit values and then filled by calling getLimit() for each signal point. The Xaxis is mstop and Yaxis is dm (mstop, mLSP) since r value is measued for each mass point which is parametrized in mstop and dm.
+
 hexp        stores nominal expected r value
 hexpup      stores expected+1sigma r value
 hexpdown    stores expected-1sigma r value
@@ -57,11 +60,11 @@ hobsdown    stores observed - 1sigma(from theory) r value
 hxsecexp    stores expected r value * theory Xsec
 hxsecobs    stores observed r value * theory Xsec
 
-theory Xsec is extracted from a given root file where theoretical Xsec and its error is stored in a histogram in the bin of mstop. Observed + 1sigma(from theory) r value means observed r value * theory Xsec/(theory Xsec + theory Xsec error) similarly observed - 1sigma(from theory) r value is observed r value * theory Xsec/(theory Xsec - theory Xsec error).
-If only the expected limit is calculated, i.e., no observed r value in the root file (from each signal), the obs 2D hostos will be empty.
+theory Xsec is extracted from a given root file where theoretical Xsec and its error is stored in a histogram in the bin of mstop. Observed + 1sigma(from theory) r value means observed r value * theory Xsec/(theory Xsec + theory Xsec error) similarly observed - 1sigma(from theory) r value is observed r value * theory Xsec/(theory Xsec - theory Xsec error). If only the expected limit is calculated, i.e., no observed r value in the root file (from each signal), the obs 2D hostos will be empty.
 
 These 2D histograms are stored in a root file called 'results_T2tt.root'. Now fillAsymptoticLimits() function calls a .C script namely makeScanPlots_dm.C where the exlusion contour is extracted and stored in a final root foot file called 'limit_scan_T2tt.root'. makeScanPlots_dm.C does the following: 
 First define similar 8 2D histograms and assign it to the corresponding histograms from results_T2tt.root. The only modification is if the observed histograms in results_T2tt.root file are empty, here observed histograms (hobs, hobsup, hobsdown, hxsecobs) are assined to the corresponding expected hostograms so that no histogram is empty. Now we store the exp (& up, down), obs (& up, down), expxsec, obsxsec values and their corresponding mstop and dm values (from those 8 2d hisos) in vectors. Using these vectors we define 8 2D TGraphs.
+
 glimexp from expxsec
 glimobs from obsxsec
 gexp, gexpup, gexpdown from exp (& up, down)
@@ -74,14 +77,14 @@ TH2D* hist = g2.GetHistogram();
 TVirtualHistPainter* histptr = hist->GetPainter();
 TList *l = histptr->GetContourList(1.);
 ```
-The contour is stored as 1d TGraph
+The contour is stored as 1D TGraph
 ```
 TGraph *g = static_cast<TGraph*>(l->At(i));
 ```
-DrawContours() funtion returns the 1D TGraph of contour. So now we have 1D contours: cexp (from gexp), cexpup (from gexpup), cexpdown (from gexpdown), cobs (from gobs), cobsup(from gobsup), cobsdown (from gobsdown). These 1D contour TGraphs are then stored in the output root file (limit_scan_T2tt.root) by the names with prefix "graph_smoothed" followed by "_Exp", "_Obs" and so on.
-2D histograms hlimexp and hlimobs are also stored by the names "hXsec_exp_corr" and "hXsec_obs_corr" respectively. hxsecexp and hxsecobs are also stored by names "hXsec_exp" and "hXsec_obs".
+DrawContours() funtion returns the 1D TGraph of contour. So now we have 1D contours: cexp (from gexp), cexpup (from gexpup), cexpdown (from gexpdown), cobs (from gobs), cobsup(from gobsup), cobsdown (from gobsdown). These 1D contour TGraphs are then stored in the output root file (limit_scan_T2tt.root) by the names with prefix "graph_smoothed" followed by "_Exp", "_Obs" and so on. 2D histograms hlimexp and hlimobs are also stored by the names "hXsec_exp_corr" and "hXsec_obs_corr" respectively. hxsecexp and hxsecobs are also stored by names "hXsec_exp" and "hXsec_obs".
 
 Making temperature plot
+
 This is done inside PlotsSMS directory. Here we provide the parameters like root file name (limit_scan_T2tt.root), base histograms (usually "hXsec_obs_corr" or "hXsec_exp_corr"), expected and observed exclusion contour specifications (like 1D contour graph name, color), and some other parameters like CMS text (Preliminary), LUMI and ENERGY by a config file named T2tt_dm_SUS.cfg which is inside config directory. Though LUMI and ENERGY values will be modified later by other python file.
 All the python scripts are inside python directory. We run the script makeSMSplots.py which take config file, T2tt_dm_SUS.cfg as 1st argument and output name as 2nd argument (usually as T2tt). First, all the parameters are processed (like config file name, model name, analysis label and output) and objects (histograms, contour graphs etc) are accessed by the class inputFile() from inputFile.py.
 
